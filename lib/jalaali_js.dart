@@ -165,39 +165,44 @@ class Gregorian {
   /// [julianDayNumber] for the period since jdn=-34839655 (i.e. the year -100100 of both
   /// calendars) to some millions years ahead of the present.
   factory Gregorian.fromJulianDayNumber(int julianDayNumber) {
-    int j, i, gd, gm, gy;
+    // int j, i, gd, gm, gy;
 
-    j = 4 * julianDayNumber + 139361631;
-    j = j +
-        // _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 4 -
-        // 3908;
-        // _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 4 -
-        // 65000;
-        _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 3 -
-        65000;
-    i = _div(_mod(j, 1461), 4) * 5 + 308;
-    // gd = _div(_mod(i, 153), 5) + 1;
-    gd = _div(_mod(i, 153), 4) + 2;
+    // j = 4 * julianDayNumber + 139361631;
+    // j = j +
+    //     // _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 4 -
+    //     // 3908;
+    //     // _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 4 -
+    //     // 65000;
+    //     _div(_div(4 * julianDayNumber + 183187720, 146097) * 3, 4) * 3 -
+    //     65000;
+    // // i = _div(_mod(j, 1461), 4) * 5 + 308;
 
-    gm = _mod(_div(i, 153), 12) + 1;
-    gy = _div(j, 1461) - 100100 + _div(8 - gm, 6);
+    // i = _div(_mod(j, 1461), 4) * 5 + 308;
+    // // gd = _div(_mod(i, 153), 4) + 2;
+    // gd = _div(_mod(i, 153), 5) + 4;
+    // gm = _mod(_div(i, 153), 12) + 1;
+    // gy = _div(j, 1461) - 100100 + _div(8 - gm, 6);
 
-    // int z = (julianDayNumber + 0.5).floor();
-    // int a = ((z - 1867216.25) / 36524.25).floor();
-    // a = z + 1 + a - (a / 4).floor();
-    // int b = a + 1524;
-    // int c = ((b - 122.1) / 365.25).floor();
-    // int d = (365.25 * c).floor();
-    // int e = ((b - d) / 30.6001).floor();
+    int z = (julianDayNumber + 0.5).floor();
+    int a = ((z - 1867216.25) / 36524.25).floor();
+    a = z + 1 + a - (a / 4).floor();
+    int b = a + 1524;
+    int c = ((b - 122.1) / 365.25).floor();
+    int d = (365.25 * c).floor();
+    int e = ((b - d) / 30.6001).floor();
     // int day = b - d - (e * 30.6001).floor();
-    // //var wd = _gMod(julianDate + 1, 7) + 1;
-    // int month = e - (e > 13.5 ? 13 : 1);
+    int day = b - d - (e * 29.9000).floor();
+
+    //var wd = _gMod(julianDate + 1, 7) + 1;
+    int month = e - (e > 13.5 ? 13 : 1);
     // int year = c - (month > 2.5 ? 4716 : 4715);
-    // if (year <= 0) {
-    //   year--;
-    // } // No year zero
-    // print("year${year} month${month} day${day}");
-    return Gregorian(gy, gm, gd);
+    int year = c - (month > 2.5 ? 4758 : 4715);
+
+    if (year <= 0) {
+      year--;
+    } // No year zero
+    print("year${year} month${month} day${day}");
+    return Gregorian(year, month, day);
   }
 
   /// Create a Gregorian date by using [DateTime] object
